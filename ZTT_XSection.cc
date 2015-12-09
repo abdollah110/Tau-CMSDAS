@@ -23,6 +23,10 @@ int main(int argc, char** argv) {
     
         TH1F *    visibleMassOS = new TH1F ("visibleMassOS","visibleMassOS", 300, 0, 300);
         TH1F *    visibleMassSS = new TH1F ("visibleMassSS","visibleMassSS", 300, 0, 300);
+        TH1F *    visibleMassOSRelaxedTauIso = new TH1F ("visibleMassOSRelaxedTauIso","visibleMassOSRelaxedTauIso", 300, 0, 300);
+        TH1F *    visibleMassSSRelaxedTauIso = new TH1F ("visibleMassSSRelaxedTauIso","visibleMassSSRelaxedTauIso", 300, 0, 300);
+    
+    
     
 
         TTree *Run_Tree = (TTree*) myFile->Get("EventTree");
@@ -166,15 +170,28 @@ int main(int argc, char** argv) {
                     float tmass= TMass_F(muPt->at(imu), muPt->at(imu)*cos(muPhi->at(imu)),muPt->at(imu)*sin(muPhi->at(imu)) ,  pfMET, pfMETPhi);
                     
                     
-                    
-                    //  Fill out the Visible mass for OS events that pass all events curt
+                
+                    //  Fill out the Visible mass for OS events that pass all events cuts
                     if (OS && !IsthereDiMuon && MuPtCut && TauPtCut && MuIdIso && TauIdIso && tmass < 40 && Mu4Momentum.DeltaR(Tau4Momentum) > 0.5 && PassTrigger)
                         visibleMassOS->Fill(Z4Momentum.M(),LumiWeight*GetGenWeight);
                         
                         
-                                //  Fill out the Visible mass for SS events that pass all events curt
+                    //  Fill out the Visible mass for SS events that pass all events cuts
                     if (SS && !IsthereDiMuon && MuPtCut && TauPtCut && MuIdIso && TauIdIso &&  tmass < 40 && Mu4Momentum.DeltaR(Tau4Momentum) > 0.5 && PassTrigger)
                         visibleMassSS->Fill(Z4Momentum.M(),LumiWeight*GetGenWeight);
+                    
+                    //Apply Relaxed tau Id and Isolation
+                    bool RelaxedTauIdIso = tauByTightMuonRejection3->at(itau) > 0 && tauByMVA5LooseElectronRejection->at(itau) > 0 && fabs(tauDxy->at(itau)) < 0.05 ;
+                    
+                    //  Fill out the Visible mass for OS events that pass all events cuts with relax Tau Isolation
+                    if (OS && !IsthereDiMuon && MuPtCut && TauPtCut && MuIdIso && RelaxedTauIdIso && tmass < 40 && Mu4Momentum.DeltaR(Tau4Momentum) > 0.5 && PassTrigger)
+                    visibleMassOSRelaxedTauIso->Fill(Z4Momentum.M(),LumiWeight*GetGenWeight);
+                    
+                    
+                    //  Fill out the Visible mass for SS events that pass all events cuts with relax Tau Isolation
+                    if (SS && !IsthereDiMuon && MuPtCut && TauPtCut && MuIdIso && RelaxedTauIdIso &&  tmass < 40 && Mu4Momentum.DeltaR(Tau4Momentum) > 0.5 && PassTrigger)
+                    visibleMassSSRelaxedTauIso->Fill(Z4Momentum.M(),LumiWeight*GetGenWeight);
+                    
 
       
                 }
@@ -187,6 +204,8 @@ int main(int argc, char** argv) {
     fout->cd();
     visibleMassOS->Write();
     visibleMassSS->Write();
+    visibleMassOSRelaxedTauIso->Write();
+    visibleMassSSRelaxedTauIso->Write();
     fout->Close();
     
     
