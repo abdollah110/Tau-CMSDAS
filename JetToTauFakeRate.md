@@ -120,6 +120,14 @@ Then loop over tau collection
 Tau Pt > 20 GeV and |eta| < 2.3
 
 
+
+Check dR between muon and tau is greater than 0.5.
+Then make the numerator and denumerator plot.  denumerator is taus with pt and eta cuts.
+Numerator is denumerator + tau Isolation
+
+Use the plotFakeRate.py macro to plot the jet to tau fake rate.
+
+
 In the nentries loop paste 
 ```
 	TLorentzVector MC4Momentum, Tau4Momentum;
