@@ -19,7 +19,9 @@ int main(int argc, char** argv) {
     TFile * myFile = new TFile(input.c_str());
     
     TH1F *    histoDenumerator = new TH1F ("histoDenumerator","histoDenumerator", 300, 0, 300);
-    TH1F *    histoNumerator = new TH1F ("histoNumerator","histoNumerator", 300, 0, 300);
+    TH1F *    histoNumeratorLoose = new TH1F ("histoNumeratorLoose","histoNumeratorLoose", 300, 0, 300);
+    TH1F *    histoNumeratorMedium = new TH1F ("histoNumeratorMedium","histoNumeratorMedium", 300, 0, 300);
+    TH1F *    histoNumeratorTight = new TH1F ("histoNumeratorTight","histoNumeratorTight", 300, 0, 300);
     
     
     TTree *Run_Tree = (TTree*) myFile->Get("EventTree");
@@ -91,14 +93,20 @@ int main(int argc, char** argv) {
                 if (Mu4Momentum.DeltaR(Tau4Momentum) > 0.5 && TauPtCut && TauPreSelection)
                 histoDenumerator->Fill(tauPt->at(itau));
                 // Fill Numerator
+                if (Mu4Momentum.DeltaR(Tau4Momentum) > 0.5 && TauPtCut && TauPreSelection && tauByLooseCombinedIsolationDeltaBetaCorr3Hits->at(itau) > 0.5)
+                histoNumeratorLoose->Fill(tauPt->at(itau));
+                if (Mu4Momentum.DeltaR(Tau4Momentum) > 0.5 && TauPtCut && TauPreSelection && tauByMediumCombinedIsolationDeltaBetaCorr3Hits->at(itau) > 0.5)
+                histoNumeratorMedium->Fill(tauPt->at(itau));
                 if (Mu4Momentum.DeltaR(Tau4Momentum) > 0.5 && TauPtCut && TauPreSelection && tauByTightCombinedIsolationDeltaBetaCorr3Hits->at(itau) > 0.5)
-                histoNumerator->Fill(tauPt->at(itau));
+                histoNumeratorTight->Fill(tauPt->at(itau));
                 
             }
         }
     }
     fout->cd();
-    histoNumerator->Write();
+    histoNumeratorLoose->Write();
+    histoNumeratorMedium->Write();
+    histoNumeratorTight->Write();
     histoDenumerator->Write();
     fout->Close();
 }
