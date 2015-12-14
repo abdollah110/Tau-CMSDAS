@@ -1,22 +1,26 @@
-Tau Id Efficiency
+Jet to Tau Fake Rate
 =================
 
 Both on Data (Single Muon data set) and MC (W+Jet events) 
 
 
-How likely is  ajet is mis-identified as a tau lepton?
+How likely is  a jet to be mis-identified as a tau lepton?
+
+0) Select W events (W-->munu events). To do so find a good muon in event and check the TMass of muon and MET to be compatible with W TMass.
 
 1) Find a tau jet which pass decay mode finding and anti muon and anti electron discriminator 
 
 2) Find how often this object can pass different working points of the Tau Isolation
 
-3) One can parametrize this fake rate v.s. Tau Pt or closet Jet pt to Tau or eta.
+3) One can parametrize this fake rate v.s. Tau Pt or closet Jet pt to Tau or eta, etc.
 
 4) Try all eta ranges- Remember to always make an eta cut for your taus! Need the tracker!
 
 5) Compare tau fake rate between data and MC
 
 6) See the fake rate of different working points! Add in other tauIDs from the TreeReader.h 
+
+7) after measuring tau ID from ZTT MC sample, make the ROC curve
 
 
 
@@ -102,7 +106,7 @@ Select W events in data and MC.
 
 Start from looping over muons
 
-Select a muon with pt > 25 GeV and |eta| < 2.1
+Select a muon with pt > 25 GeV and |eta| < 2.1 (do not forget to apply single Muon Trigger)
 
 Aplly muon Isolation as following:
 
@@ -144,8 +148,7 @@ In the nentries loop paste
 	}//end reconstructed tau loop
 ```
 
-Now your code is all set up. You can ```/Make.sh tauEfficiency.cc``` and then ```./tauEfficiency.exe outputEfficiency.root tot_job_spring15_ggNtuple_WJetsToLNu_amcatnlo_pythia8_25ns_miniAOD.root ``` 
+Now your code is all set up. You can ```/Make.sh jetToTauFakeRate.cc``` and then ```./jetToTauFakeRate.cc outputFR.root tot_job_spring15_ggNtuple_WJetsToLNu_amcatnlo_pythia8_25ns_miniAOD.root ``` 
 
-When you have ```outputEfficiency.root``` you can run ```python plotEfficiency.py``` to create ```tauEfficiency.pdf```
 
 
