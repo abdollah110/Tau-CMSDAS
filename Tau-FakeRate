@@ -42,14 +42,7 @@
 
 
  
-To be able to run on the above files you need to have a valid grid proxy. In case you do not have grid, 
-
-copy the file from my public are in afs (lxplus machines):
-/afs/cern.ch/user/a/abdollah/public/TauTutorial/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8.root
-
-
-or get it from the following line (from lpc machines):
-/eos/uscms/store/user/jjesus/048FB1EE-33FD-E411-A2BA-0025905A6094.root
+To be able to run on the above files you need to have a valid grid proxy.
 
 
 #add following line in cfg file
