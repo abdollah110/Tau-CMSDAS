@@ -1,0 +1,16 @@
+./ZTT_XSection.exe SingleEle.root /Users/abdollah1/GIT_abdollah110/ggNtuple/ggAnalysis/RecoAnalysis/ROOT/NewTot2/tot_job_SingleEle_Run2015D_TOT.root
+
+./ZTT_XSection.exe SingleMu.root /Users/abdollah1/GIT_abdollah110/ggNtuple/ggAnalysis/RecoAnalysis/ROOT/NewTot2/tot_job_SingleMu_Run2015D_TOT.root
+
+
+./ZTT_XSection.exe DYJetsToLL.root /Users/abdollah1/GIT_abdollah110/ggNtuple/ggAnalysis/RecoAnalysis/ROOT/NewTot2/tot_job_spring15_ggNtuple_DYJetsToLL_M-50_amcatnlo_pythia8_25ns_miniAOD.root
+
+./ZTT_XSection.exe TTJets.root /Users/abdollah1/GIT_abdollah110/ggNtuple/ggAnalysis/RecoAnalysis/ROOT/NewTot2/tot_job_spring15_ggNtuple_TTJets_amcatnlo_pythia8_25ns_miniAOD.root
+
+./ZTT_XSection.exe WJetsToLNu.root /Users/abdollah1/GIT_abdollah110/ggNtuple/ggAnalysis/RecoAnalysis/ROOT/NewTot2/tot_job_spring15_ggNtuple_WJetsToLNu_amcatnlo_pythia8_25ns_miniAOD.root
+
+./ZTT_XSection.exe WWTo2L2Nu.root /Users/abdollah1/GIT_abdollah110/ggNtuple/ggAnalysis/RecoAnalysis/ROOT/NewTot2/tot_job_spring15_ggNtuple_WWTo2L2Nu_powheg_25ns_miniAOD.root
+
+./ZTT_XSection.exe WZTo3LNu.root /Users/abdollah1/GIT_abdollah110/ggNtuple/ggAnalysis/RecoAnalysis/ROOT/NewTot2/tot_job_spring15_ggNtuple_WZTo3LNu_powheg_pythia8_25ns_miniAOD.root
+
+./ZTT_XSection.exe ZZTo4L.root /Users/abdollah1/GIT_abdollah110/ggNtuple/ggAnalysis/RecoAnalysis/ROOT/NewTot2/tot_job_spring15_ggNtuple_ZZTo4L_powheg_pythia8_25ns_miniAOD.root
