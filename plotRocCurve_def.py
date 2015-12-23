@@ -1,5 +1,5 @@
 '''
-Definitions for plotRocCurve.py so that ear can stay cleaner
+Definitions for plotRocCurve.py so that other can stay cleaner
 Author: L. Dodd, UW Madison
 '''
 
