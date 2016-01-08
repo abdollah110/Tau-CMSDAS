@@ -11,11 +11,11 @@ int main(int argc, char** argv) {
     
     std::string out = *(argv + 1);
     
-    cout << "\n\n\n OUTPUT NAME IS:    " << out << endl;     //PRINTING THE OUTPUT File name
+    cout << "\n\n\n OUTPUT NAME IS:    " << out << endl;     //PRINTING THE OUTPUT FILE NAME
     TFile *fout = TFile::Open(out.c_str(), "RECREATE");
     
     std::string input = *(argv + 2);
-    cout << "\n\n\n InPUT NAME IS:    " << input << endl;     //PRINTING THE Input File name
+    cout << "\n\n\n INPUT NAME IS:    " << input << endl;     //PRINTING THE INPUT FILE NAME
     TFile * myFile = new TFile(input.c_str());
     
     TH1F *    histoDenominator = new TH1F ("histoDenominator","histoDenominator", 300, 0, 300);
@@ -41,9 +41,7 @@ int main(int argc, char** argv) {
     Run_Tree->SetBranchAddress("tauByTightMuonRejection3", &tauByTightMuonRejection3);
     Run_Tree->SetBranchAddress("tauByMVA5LooseElectronRejection", &tauByMVA5LooseElectronRejection);
     Run_Tree->SetBranchAddress("tauByLooseCombinedIsolationDeltaBetaCorr3Hits",&tauByLooseCombinedIsolationDeltaBetaCorr3Hits);
-    Run_Tree->SetBranchAddress("tauByMediumCombinedIsolationDeltaBetaCorr3Hits",&tauByMediumCombinedIsolationDeltaBetaCorr3Hits);
-    Run_Tree->SetBranchAddress("tauByTightCombinedIsolationDeltaBetaCorr3Hits",&tauByTightCombinedIsolationDeltaBetaCorr3Hits);
-    
+
     
     Int_t nentries_wtn = (Int_t) Run_Tree->GetEntries();
     cout<<"nentries_wtn===="<<nentries_wtn<<"\n";
@@ -72,7 +70,7 @@ int main(int argc, char** argv) {
 
 			if (TauPtCut && TauPreSelection)
 				histoDenominator->Fill(tauPt->at(itau));
-			if (TauPtCut && TauPreSelection && tauByTightCombinedIsolationDeltaBetaCorr3Hits->at(itau) > 0.5)
+			if (TauPtCut && TauPreSelection && tauByLooseCombinedIsolationDeltaBetaCorr3Hits->at(itau) > 0.5)
 				histoNumerator->Fill(tauPt->at(itau));
 
 			break; //Exit the tau loop, a match was found!
