@@ -1,7 +1,7 @@
 # Code written by:  zaixing.mao@cern.ch && edward.laird@cern.ch from Brown U.
 #!/usr/bin/env python
 import ROOT as r
-
+f = r.TFile("plot.root","recreate")
 ################################################
 # Sevreal Histograms are initiated/produced here
 defaultOrder = [('Diboson', r.TColor.GetColor(222, 90,106)),
@@ -142,13 +142,16 @@ def xs_calculator(fileList = [], mass_low = 25, mass_high = 125, nbins = 12):
     histDict['data_OST'].Draw('same PE')
     legendDict['T'].Draw('same')
     c.SaveAs('%s' %pdf)
+    f.Write()
+    f.Close()
+
 
 
     print 'DY->ll xs in tight region: %.1f pb' %XS_OST
 
 
 
-dirName = '/Users/abdollah1/GIT_abdollah110/SCHOOL/Tau-CMSDAS/'
+dirName = '.'
 
 fileList = [('DY', '%s/DYJetsToLL.root' %dirName),
             ('TTJets', '%s/TTJets.root' %dirName),
