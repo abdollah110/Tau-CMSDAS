@@ -28,7 +28,7 @@ canv = TCanvas("canv", "histograms", 0, 0, 600, 600)
 fakeRate.SetMinimum(0.5)
 fakeRate.GetXaxis().SetRangeUser(0,300)
 fakeRate.GetXaxis().SetTitle("#tau p_{T} [GeV]")
-fakeRate.GetYaxis().SetRangeUser(0,1)
+fakeRate.GetYaxis().SetRangeUser(0,0.2)
 fakeRate.SetTitle('Jet to Tau Fake Rate')
 fakeRate.SetMarkerStyle(20)
 
