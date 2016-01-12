@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     
     std::string input = *(argv + 2);
     cout << "\n\n\n InPUT NAME IS:    " << input << endl;     //PRINTING THE Input File name
-    TFile * myFile = new TFile(input.c_str());
+    TFile * myFile = TFile::Open(input.c_str());
     
     TH1F *    histoDenominator = new TH1F ("histoDenominator","histoDenominator", 300, 0, 300);
     TH1F *    histoNumerator = new TH1F ("histoNumerator","histoNumerator", 300, 0, 300);
