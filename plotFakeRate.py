@@ -12,8 +12,8 @@ import array
 
 
 
-Binning_PT = array.array("d",[0,20,25,30,40,55,75,95,120,150,200,300])
-OutFile=TFile("OutPut.root")
+Binning_PT = array.array("d",[0,20,25,30,35,40,50,60,75,95,120,150,200])
+OutFile=TFile("OutPutFR.root")
 
 HistoNum=OutFile.Get("histoNumerator")
 HistoNum= HistoNum.Rebin(len(Binning_PT)-1,"",Binning_PT)
@@ -24,11 +24,11 @@ HistoDeNum= HistoDeNum.Rebin(len(Binning_PT)-1,"",Binning_PT)
 fakeRate=ROOT.TGraphAsymmErrors(HistoNum, HistoDeNum, "")
 
 canv = TCanvas("canv", "histograms", 0, 0, 600, 600)
-
+canv.SetLogy()
 fakeRate.SetMinimum(0.5)
-fakeRate.GetXaxis().SetRangeUser(0,300)
+fakeRate.GetXaxis().SetRangeUser(0,200)
 fakeRate.GetXaxis().SetTitle("#tau p_{T} [GeV]")
-fakeRate.GetYaxis().SetRangeUser(0,0.2)
+fakeRate.GetYaxis().SetRangeUser(0.01,0.1)
 fakeRate.SetTitle('Jet to Tau Fake Rate')
 fakeRate.SetMarkerStyle(20)
 
