@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
     
     std::string input = *(argv + 2);
     cout << "\n\n\n InPUT NAME IS:    " << input << endl;     //PRINTING THE Input File name
-    TFile * myFile = new TFile(input.c_str());
+    TFile * myFile = TFile::Open(input.c_str());
     TH1F * HistoTot = (TH1F*) myFile->Get("hcount");
     TH1F * HistohPU = (TH1F*) myFile->Get("hPU");
     TH1F * HistohPUTrue = (TH1F*) myFile->Get("hPUTrue");
