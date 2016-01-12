@@ -25,7 +25,7 @@ def get_histo(ntuple_file, histname=''):
 def get_ratio(histoId, ntuple):
     ''' Get the effi given one ntuple and two histos '''
     num = get_histo(ntuple,histoId)
-    denom = get_histo(ntuple,"histoDenumerator")
+    denom = get_histo(ntuple,"histoDenominator")
     effi = num.Integral() / denom.Integral()
     return effi
 
@@ -68,7 +68,7 @@ def produce_roc_curve(ntupleEff,ntupleFR,histoId1, legend1, histoId2, legend2, h
     #Draw Axis,Line,Points
     frame.Draw("ALP")
     frame.GetXaxis().SetLimits(0.,1.)
-    frame.GetYaxis().SetRangeUser(0.,1.)
+    frame.GetYaxis().SetRangeUser(0.,0.1)
     #Add Legend for the IDs
     legend = ROOT.TLegend(0.7, 0.7, 0.89, 0.8, "", "brNDC")
     legend.SetFillColor(ROOT.kWhite)
