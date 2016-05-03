@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
     cout.setf(ios::fixed, ios::floatfield);
     cout.precision(6);
     
-    
+        Run_Tree->SetBranchAddress("isData", &isData);    
     Run_Tree->SetBranchAddress("run", &run);
     Run_Tree->SetBranchAddress("lumis", &lumis);
     Run_Tree->SetBranchAddress("event", &event);
