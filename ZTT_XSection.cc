@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
         if (!isData){
             
             if (HistoTot) LumiWeight = weightCalc(HistoTot, input);
-            cout<<"LumiWeight is "<<LumiWeight<<"\n";            
+//            cout<<"LumiWeight is "<<LumiWeight<<"\n";            
             GetGenWeight=genWeight;
             
             int puNUmmc=int(puTrue->at(0)*10);
