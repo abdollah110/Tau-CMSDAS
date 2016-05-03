@@ -25,9 +25,11 @@ float XSection(std::string OutName) {
     else if (OutName.compare("DYJetsToLL") == 0) return 6025.2;
     else if (OutName.compare("TTJets") == 0) return 831.76 ;
     
-    else if (OutName.compare("WW") == 0) return 309.7;
-    else if (OutName.compare("WZ") == 0) return 30400;
-    else if (OutName.compare("ZZ") == 0) return 5400;
+    //Di-boson
+    else if (OutName.compare("WW") == 0) return 115.0;
+    else if (OutName.compare("WZ") == 0) return 47.13;
+    else if (OutName.compare("ZZ") == 0) return 16.523;
+    
     else return 0;
 }
 
@@ -36,8 +38,7 @@ float weightCalc(TH1F *Histo,std::string outputName) {
     
 //    cout<< "outputName is "<<outputName << "  and histoname is " <<Histo->GetName()<<  " Histo->GetBinContent(1)="<<Histo->GetBinContent(1)<< " XSection(wjet)=" <<XSection("WJets")<<"\n";
     
-//    float luminosity=1264-55;
-        float luminosity=1560;
+        float luminosity=2262.946;
     
     size_t isSingleMu = outputName.find("SingleMu");
     size_t isSingleEle = outputName.find("SingleEle");
@@ -47,6 +48,7 @@ float weightCalc(TH1F *Histo,std::string outputName) {
     size_t isWW = outputName.find("WW");
     size_t isWZ = outputName.find("WZ");
     size_t isZZ = outputName.find("ZZ");
+    
     
     if (isSingleMu != string::npos || isSingleEle!= string::npos)   return 1;
     else if ( isWjet != string::npos ) return (luminosity * XSection("WJets")*1.0) / Histo->GetBinContent(2) ;
