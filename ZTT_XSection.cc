@@ -19,11 +19,11 @@ int main(int argc, char** argv) {
     TH1F * HistohPU = (TH1F*) myFile->Get("hPU");
     TH1F * HistohPUTrue = (TH1F*) myFile->Get("hPUTrue");
     
-    TFile * PUData= TFile::Open("pileup-hists/Data_Pileup_2015D_Nov17.root");
+    TFile * PUData= TFile::Open("pileup-hists/MyDataPileupHistogram2016.root");
     TH1F * HistoPUData= (TH1F *) PUData->Get("pileup");
     HistoPUData->Scale(1.0/HistoPUData->Integral());
     
-    TFile * PUMC= TFile::Open("pileup-hists/MC_Spring15_PU25_Startup.root");
+    TFile * PUMC= TFile::Open("pileup-hists/Sprin16_MC.root");
     TH1F * HistoPUMC= (TH1F *) PUMC->Get("pileup");
     HistoPUMC->Scale(1.0/HistoPUMC->Integral());
 

@@ -38,13 +38,13 @@ float weightCalc(TH1F *Histo,std::string outputName) {
     
 //    cout<< "outputName is "<<outputName << "  and histoname is " <<Histo->GetName()<<  " Histo->GetBinContent(1)="<<Histo->GetBinContent(1)<< " XSection(wjet)=" <<XSection("WJets")<<"\n";
     
-        float luminosity=2262.946;
+        float luminosity=12900;
     
     size_t isSingleMu = outputName.find("SingleMu");
     size_t isSingleEle = outputName.find("SingleEle");
     size_t isWjet = outputName.find("WJets");
     size_t isZJet = outputName.find("DYJetsToLL");
-    size_t isTTbar = outputName.find("TTJets");
+    size_t isTTbar = outputName.find("TTbar");
     size_t isWW = outputName.find("WW");
     size_t isWZ = outputName.find("WZ");
     size_t isZZ = outputName.find("ZZ");
