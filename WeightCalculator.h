@@ -22,7 +22,7 @@ float XSection(std::string OutName) {
 //    https://docs.google.com/spreadsheets/d/1rWM3AlFKO8IJVaeoQkWZYWwSvicQ1QCXYSzH74QyZqE/edit?alt=json#gid=398123591
     
     if (OutName.compare("WJets") == 0) return 61526;
-    else if (OutName.compare("DYJetsToLL") == 0) return 6025.2;
+    else if (OutName.compare("DYJetsToLL") == 0) return 5765.4; // 3 * 1921=57654   //6025.2
     else if (OutName.compare("TTJets") == 0) return 831.76 ;
     
     //Di-boson
