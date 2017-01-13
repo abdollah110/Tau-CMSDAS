@@ -13,6 +13,12 @@ if len(argv)>1:
 else:
    FoundXS=1.00
 
+r.gStyle.SetOptStat(0)
+r.gROOT.SetBatch(True)  # to suppress canvas pop-outs
+
+x_min = 50
+x_max = 110
+
 f = r.TFile("prefit.root","recreate")
 ################################################
 # Sevreal Histograms are initiated/produced here
@@ -22,29 +28,43 @@ defaultOrder = [("Diboson", r.TColor.GetColor(222, 90,106)),
                 ('QCD', r.TColor.GetColor(250,202,255)),
                 ('DY', r.TColor.GetColor(248,206,104))]
 
+def buildRatios(ratioHist, denom):
+    for i in range(1, ratioHist.GetNbinsX()+1):
+        de = denom.GetBinContent(i)
+        nu = ratioHist.GetBinContent(i)
+        nu_err = ratioHist.GetBinError(i)
+        if de != 0:
+            ratioHist.SetBinContent(i, nu/de)
+            ratioHist.SetBinError(i, nu_err/de)
+        else:
+            ratioHist.SetBinContent(i, 1000)
+            ratioHist.SetBinError(i, 0)
 
 def buildHistDict(nbins):
+    binsSetting = [32, 0, 180]   
+    #binsSetting = [30, 0, 150]   
+
     histDict = {}
     for iSample, iColor in defaultOrder:
-        histDict[iSample+'_OST'] = r.TH1F(iSample+'_OST', '', nbins, 0, 300)
+        histDict[iSample+'_OST'] = r.TH1F(iSample+'_OST', '', binsSetting[0], binsSetting[1], binsSetting[2])
         histDict[iSample+'_OST'].SetFillColor(iColor)
         histDict[iSample+'_OST'].SetMarkerColor(iColor)
         histDict[iSample+'_OST'].SetMarkerStyle(21)
         histDict[iSample+'_OST'].SetLineColor(r.kBlack)
 
-    histDict['bkg_OST'] = r.TH1F('bkg_OST', '', nbins, 0, 300)
+    histDict['bkg_OST'] = r.TH1F('bkg_OST', '', binsSetting[0], binsSetting[1], binsSetting[2])
     histDict['bkg_OST'].Sumw2()
     histDict['bkg_OST'].SetFillColor(r.kGray+2)
     histDict['bkg_OST'].SetLineColor(r.kGray+2)
     histDict['bkg_OST'].SetFillStyle(3344)
-    histDict['data_OST'] = r.TH1F('data_OST', '', nbins, 0, 300)
+    histDict['data_OST'] = r.TH1F('data_OST', '', binsSetting[0], binsSetting[1], binsSetting[2])
     histDict['data_OST'].Sumw2()
     histDict['data_OST'].SetMarkerStyle(8)
     histDict['data_OST'].SetMarkerSize(0.9)
     histDict['data_OST'].SetMarkerColor(r.kBlack)
 
 
-    histDict['DY_SST'] = r.TH1F('DY_SST', '', nbins, 0, 300)
+    histDict['DY_SST'] = r.TH1F('DY_SST', '', binsSetting[0], binsSetting[1], binsSetting[2])
     return histDict
 ################################################
 
@@ -85,12 +105,16 @@ def buildStackDict(histDict, xs_T):
             
     return stackDict
 
-def FillHisto(input, output, weight = 1.0):
+def FillHisto(input, output, weight = 1.0, mass_low = 0, mass_high = 1000):
     for i in range(input.GetNbinsX()):
-       currentValue = output.GetBinContent(i+1)
-       currentError = output.GetBinError(i+1)
-       output.SetBinContent(i+1, currentValue+input.GetBinContent(i+1)*weight)
-       output.SetBinError(i+1, math.sqrt((input.GetBinError(i+1))**2 + currentError**2))
+        if output.GetBinCenter(i+1) < mass_low:
+            continue
+        if output.GetBinCenter(i+1) > mass_high:
+            continue
+        currentValue = output.GetBinContent(i+1)
+        currentError = output.GetBinError(i+1)
+        output.SetBinContent(i+1, currentValue+input.GetBinContent(i+1)*weight)
+        output.SetBinError(i+1, math.sqrt((input.GetBinError(i+1))**2 + currentError**2))
 
 def buildLegendDict(histDict, position, XS_OST):
     legendDict = {}
@@ -135,17 +159,20 @@ def xs_calculator(fileList = [], mass_low = 25, mass_high = 125, nbins = 50):
             weight = 1.0
             tauWeight = 1.0
 
-        lowBin, highBin = getBins(ifile.Get('visibleMassOS'), mass_low, mass_high)
-        FillHisto(ifile.Get('visibleMassOS'), histDict[iFileName+'_OST'], tauWeight)
+        osName = 'visibleMassOS'#'met_OS'#
+        ssName = 'visibleMassSS'#'met_SS'#
+
+        lowBin, highBin = getBins(ifile.Get(osName), mass_low, mass_high)
+        FillHisto(ifile.Get(osName), histDict[iFileName+'_OST'], tauWeight, mass_low, mass_high)
 
         if not isDY:
-            ZTT_OST += weight*ifile.Get('visibleMassOS').Integral(lowBin, highBin)
-            QCD_SST += weight*ifile.Get('visibleMassSS').Integral(lowBin, highBin)
-            FillHisto(ifile.Get('visibleMassSS'), histDict['QCD_OST'], weight*tauWeight)
+            ZTT_OST += weight*ifile.Get(osName).Integral(lowBin, highBin)
+            QCD_SST += weight*ifile.Get(ssName).Integral(lowBin, highBin)
+            FillHisto(ifile.Get(ssName), histDict['QCD_OST'], weight*tauWeight, mass_low, mass_high)
 
         else:
-            FillHisto(ifile.Get('visibleMassSS'), histDict['DY_SST'], tauWeight)
-            DY_OST += ifile.Get('visibleMassOS').Integral(lowBin, highBin)
+            FillHisto(ifile.Get(ssName), histDict['DY_SST'], tauWeight, mass_low, mass_high)
+            DY_OST += ifile.Get(osName).Integral(lowBin, highBin)
 
 
     lowBin, highBin = getBins(histDict['DY_SST'], mass_low, mass_high)
@@ -160,7 +187,21 @@ def xs_calculator(fileList = [], mass_low = 25, mass_high = 125, nbins = 50):
     #plot
     pdf = 'xs.pdf'
     c = r.TCanvas("c","Test", 800, 600)
+    p_coords = [0., 1, 1., 0.3]
+    p_r_coords = [0.,0.3,1.,0.06]
+    p = r.TPad("stack", "", p_coords[0], p_coords[1], p_coords[2], p_coords[3])
+    p_r = r.TPad("ratio", "", p_r_coords[0], p_r_coords[1], p_r_coords[2], p_r_coords[3])
+    p.SetMargin(1, 1, 0, 0.1)
+    p_r.SetMargin(1, 1, 0.2, 0)
+
+    p.Draw()
+    p_r.Draw()
+    p.cd()
+    r.gPad.SetTicky()
+    r.gPad.SetTickx()
+
     max_t = 1.2*max(stackDict['OST'].GetMaximum(), histDict['data_OST'].GetMaximum())
+    stackDict['OST'].SetMinimum(0.001)
     stackDict['OST'].Draw('hist H')
     stackDict['OST'].SetTitle('OS Tight Tau Iso; visibleMass; events')
     stackDict['OST'].SetMaximum(max_t)
@@ -174,6 +215,32 @@ def xs_calculator(fileList = [], mass_low = 25, mass_high = 125, nbins = 50):
     print 'W Expected: %0.2f' %(histDict['WJets_OST'].Integral(lowBin,highBin))
     print 'QCD Expected: %0.2f' %(histDict['QCD_OST'].Integral(lowBin,highBin))
     legendDict['T'].Draw('same')
+
+    c.Update()
+    p_r.cd()
+    r.gPad.SetTicky()
+    r.gPad.SetTickx()
+    ratio = histDict['data_OST'].Clone()
+    ratio_unc = histDict['bkg_OST'].Clone()
+    buildRatios(ratio, histDict['bkg_OST'])
+    buildRatios(ratio_unc, histDict['bkg_OST'])
+    ratio.GetYaxis().SetNdivisions(5,5,0)
+    ratio.GetXaxis().SetLabelSize(0.1)
+    ratio.GetXaxis().SetTitleSize(0.1)
+    ratio.GetYaxis().SetLabelSize(0.1)
+    ratio.GetYaxis().SetNdivisions(5,5,0)
+    ratio.GetYaxis().SetTitleSize(0.1)
+    ratio.GetYaxis().SetTitleOffset(0.43)
+    ratio.GetYaxis().CenterTitle()
+    ratio.SetMaximum(1.49)
+    ratio.SetMinimum(0.5)
+    ratio.Draw("PE")
+    ratio_unc.Draw('E2 same')
+    p_r.SetGridy(1)
+    r.gPad.Update()
+    r.gPad.RedrawAxis()
+    c.Update()
+
     c.SaveAs('%s' %pdf)
     f.Write()
     f.Close()
@@ -192,4 +259,4 @@ fileList = [('DY', '%s/DYJetsToLL.root' %dirName),
             ('data', '%s/SingleMu.root' %dirName),
             ]
 
-xs_calculator(fileList = fileList, mass_low = 25, mass_high = 125, nbins = 50)
+xs_calculator(fileList = fileList, mass_low = 40, mass_high = 120)
