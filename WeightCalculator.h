@@ -63,6 +63,9 @@ float weightCalc(TH1F *Histo,std::string outputName) {
 
 
 
+float TMass_F(float pt3lep, float px3lep, float py3lep, float met, float metPhi) {
+    return sqrt(pow(pt3lep + met, 2) - pow(px3lep + met * cos(metPhi), 2) - pow(py3lep + met * sin(metPhi), 2));
+}
 
 
 
