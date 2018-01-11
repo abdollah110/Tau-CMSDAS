@@ -22,10 +22,11 @@ x_max = 110
 f = r.TFile("prefit.root","recreate")
 ################################################
 # Sevreal Histograms are initiated/produced here
-defaultOrder = [("Diboson", r.TColor.GetColor(222, 90,106)),
+defaultOrder = [
+ 		('QCD', r.TColor.GetColor(250,202,255)),
                 ('WJets',  r.TColor.GetColor(100,182,232)),
                 ('TTJets', r.TColor.GetColor(155,152,204)),
-                ('QCD', r.TColor.GetColor(250,202,255)),
+		("ZLL", r.TColor.GetColor(222, 90,106)),
                 ('DY', r.TColor.GetColor(248,206,104))]
 
 def buildRatios(ratioHist, denom):
@@ -50,7 +51,7 @@ def buildHistDict(nbins, binsSetting):
         histDict[iSample+'_OST'].SetMarkerColor(iColor)
         histDict[iSample+'_OST'].SetMarkerStyle(21)
         histDict[iSample+'_OST'].SetLineColor(r.kBlack)
-
+    print 'Hello', iSample+'_OST', histDict[iSample+'_OST'].Integral()  
     histDict['bkg_OST'] = r.TH1F('bkg_OST', '', binsSetting[0], binsSetting[1], binsSetting[2])
     histDict['bkg_OST'].Sumw2()
     histDict['bkg_OST'].SetFillColor(r.kGray+2)
@@ -110,6 +111,7 @@ def FillHisto(input, output, weight = 1.0, mass_low = 0, mass_high = 1000):
         currentError = output.GetBinError(i+1)
         output.SetBinContent(i+1, currentValue+input.GetBinContent(i+1)*weight)
         output.SetBinError(i+1, math.sqrt((input.GetBinError(i+1))**2 + currentError**2))
+	#output.Scale(2)
 
 def buildLegendDict(histDict, position, XS_OST):
     legendDict = {}
@@ -148,6 +150,7 @@ def xs_calculator(fileList = [], mass_low = 25, mass_high = 125, nbins = 50, var
             isDY = True
 
         ifile = r.TFile(iFileLocation)
+
         weight = -1.0
         tauWeight = 0.9
         if isData:
@@ -175,10 +178,10 @@ def xs_calculator(fileList = [], mass_low = 25, mass_high = 125, nbins = 50, var
     histDict['QCD_OST'].Add(histDict['DY_SST'], -1.0)
     #histDict['QCD_OST'].Add(histDict['DY_SST'], -1.0*XS_OST/6025.2)
     histDict['QCD_OST'].Scale(QCD_SS_to_OS_SF)
-
     stackDict = buildStackDict(histDict, XS_OST)
     legendDict = buildLegendDict(histDict, (0.6, 0.8 - 0.06*4, 0.85, 0.8), XS_OST)
-
+    #histDict['ZLL_OST'].Scale(2)
+    #print 'Hello 2222', histDict['ZLL_OST'].Integral()
     #plot
     pdf = 'xs.pdf'
     c = r.TCanvas("c","Test", 800, 800)
@@ -227,8 +230,8 @@ def xs_calculator(fileList = [], mass_low = 25, mass_high = 125, nbins = 50, var
     ratio.GetYaxis().SetTitleSize(0.1)
     ratio.GetYaxis().SetTitleOffset(0.43)
     ratio.GetYaxis().CenterTitle()
-    ratio.SetMaximum(1.49)
-    ratio.SetMinimum(0.5)
+    ratio.SetMaximum(2.0)
+    ratio.SetMinimum(0.0)
     ratio.SetTitle("; %s; ratio" %variableName)
 
     ratio.Draw("PE")
@@ -247,12 +250,13 @@ def xs_calculator(fileList = [], mass_low = 25, mass_high = 125, nbins = 50, var
 
 dirName = '.'
 
-fileList = [('DY', '%s/DYJetsToLL.root' %dirName),
+fileList = [('DY', '%s/DYJetsToTauTau.root' %dirName),
+            ('ZLL', '%s/DYJetsToLL.root ' %dirName),
             ('TTJets', '%s/TTJets.root' %dirName),
             ('WJets', '%s/WJetsToLNu.root' %dirName),
-            ('Diboson', '%s/WW.root' %dirName),
-            ('Diboson', '%s/WZ.root' %dirName),
-            ('Diboson', '%s/ZZ.root' %dirName),
+           # ('ZLL', '%s/DYJetsToLL.root ' %dirName),
+#            ('Diboson', '%s/WZ.root' %dirName),
+#            ('Diboson', '%s/ZZ.root' %dirName),
             ('data', '%s/SingleMu.root' %dirName),
             ]
 
