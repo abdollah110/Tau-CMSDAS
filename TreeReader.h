@@ -243,6 +243,7 @@ vector<int>     *muPixelHits;
 vector<int>     *muMuonHits;
 vector<int>     *muStations;
 vector<int>     *muMatches;
+vector<bool>    *muIsMediumID;
 vector<int>     *muTrkQuality;
 vector<float>   *muIsoTrk;
 vector<float>   *muPFChIso;
