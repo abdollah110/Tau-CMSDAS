@@ -29,6 +29,7 @@
 #include "TPaveText.h"
 #include "TFrame.h"
 #include "TLorentzVector.h"
+#include "WeightCalculator.h"
 using namespace std;
 
 
