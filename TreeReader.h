@@ -8,6 +8,26 @@
 #include <utility>
 #include <iostream>
 #include <map>
+#include "TFile.h"
+#include "TTree.h"
+#include "TBrowser.h"
+#include "TH1.h"
+#include "TH2.h"
+#include "TH1F.h"
+#include "TF1.h"
+#include "TRandom.h"
+#include "TCanvas.h"
+#include "math.h"
+#include "TGaxis.h"
+#include "TLegend.h"
+#include "TGraph.h"
+#include "TGraphAsymmErrors.h"
+#include "TInterpreter.h"
+#include "TSystem.h"
+#include "TNtuple.h"
+#include "TPaveLabel.h"
+#include "TPaveText.h"
+#include "TFrame.h"
 using namespace std;
 
 
