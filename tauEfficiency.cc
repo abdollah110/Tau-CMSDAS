@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
     Run_Tree->SetBranchAddress("tauMass"  ,&tauMass);
     Run_Tree->SetBranchAddress("tauDxy",&tauDxy);
     Run_Tree->SetBranchAddress("tauByTightMuonRejection3", &tauByTightMuonRejection3);
-    Run_Tree->SetBranchAddress("tauByMVA5LooseElectronRejection", &tauByMVA5LooseElectronRejection);
+    Run_Tree->SetBranchAddress("tauByMVA6LooseElectronRejection", &tauByMVA6LooseElectronRejection);
     Run_Tree->SetBranchAddress("tauByLooseCombinedIsolationDeltaBetaCorr3Hits",&tauByLooseCombinedIsolationDeltaBetaCorr3Hits);
 
     
