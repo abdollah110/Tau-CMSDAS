@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     Run_Tree->SetBranchAddress("tauMass"  ,&tauMass);
     Run_Tree->SetBranchAddress("tauDxy",&tauDxy);
     Run_Tree->SetBranchAddress("tauByTightMuonRejection3", &tauByTightMuonRejection3);
-    Run_Tree->SetBranchAddress("tauByMVA5LooseElectronRejection", &tauByMVA5LooseElectronRejection);
+    Run_Tree->SetBranchAddress("tauByMVA6LooseElectronRejection", &tauByMVA6LooseElectronRejection);
     Run_Tree->SetBranchAddress("tauByLooseCombinedIsolationDeltaBetaCorr3Hits",&tauByLooseCombinedIsolationDeltaBetaCorr3Hits);
     Run_Tree->SetBranchAddress("tauByMediumCombinedIsolationDeltaBetaCorr3Hits",&tauByMediumCombinedIsolationDeltaBetaCorr3Hits);
     Run_Tree->SetBranchAddress("tauByTightCombinedIsolationDeltaBetaCorr3Hits",&tauByTightCombinedIsolationDeltaBetaCorr3Hits);
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
                 Tau4Momentum.SetPtEtaPhiM(tauPt->at(itau),tauEta->at(itau),tauPhi->at(itau),tauMass->at(itau));
                 
                 bool TauPtCut = tauPt->at(itau) > 20  && fabs(tauEta->at(itau)) < 2.3 ;
-                bool TauPreSelection = tauByTightMuonRejection3->at(itau) > 0 && tauByMVA5LooseElectronRejection->at(itau) > 0 && fabs(tauDxy->at(itau)) < 0.05 ;
+                bool TauPreSelection = tauByTightMuonRejection3->at(itau) > 0 && tauByMVA6LooseElectronRejection->at(itau) > 0 && fabs(tauDxy->at(itau)) < 0.05 ;
                 
                 // Fill Denominator
                 if (Mu4Momentum.DeltaR(Tau4Momentum) > 0.5 && TauPtCut && TauPreSelection)
