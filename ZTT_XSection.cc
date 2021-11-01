@@ -1,5 +1,5 @@
 #include "TreeReader.h"
-#include "WeightCalculator.h"
+//#include "WeightCalculator.h"
 #include <string>
 #include <ostream>
 
@@ -54,14 +54,14 @@ int main(int argc, char** argv) {
     Run_Tree->SetBranchAddress("tauPhi"  ,&tauPhi);
     Run_Tree->SetBranchAddress("tauMass"  ,&tauMass);
     Run_Tree->SetBranchAddress("tauCharge"  ,&tauCharge);
-    Run_Tree->SetBranchAddress("pfTausDiscriminationByDecayModeFinding", &pfTausDiscriminationByDecayModeFinding);
+    Run_Tree->SetBranchAddress("taupfTausDiscriminationByDecayModeFinding", &taupfTausDiscriminationByDecayModeFinding);
     Run_Tree->SetBranchAddress("tauByTightMuonRejection3", &tauByTightMuonRejection3);
     Run_Tree->SetBranchAddress("tauByLooseMuonRejection3", &tauByLooseMuonRejection3);
-    Run_Tree->SetBranchAddress("tauByMVA5MediumElectronRejection"  ,&tauByMVA5MediumElectronRejection);
+    Run_Tree->SetBranchAddress("tauByMVA6MediumElectronRejection"  ,&tauByMVA6MediumElectronRejection);
     Run_Tree->SetBranchAddress("tauByLooseCombinedIsolationDeltaBetaCorr3Hits",&tauByLooseCombinedIsolationDeltaBetaCorr3Hits);
     Run_Tree->SetBranchAddress("tauByMediumCombinedIsolationDeltaBetaCorr3Hits",&tauByMediumCombinedIsolationDeltaBetaCorr3Hits);
     Run_Tree->SetBranchAddress("tauByTightCombinedIsolationDeltaBetaCorr3Hits",&tauByTightCombinedIsolationDeltaBetaCorr3Hits);
-    Run_Tree->SetBranchAddress("tauByMVA5LooseElectronRejection", &tauByMVA5LooseElectronRejection);
+    Run_Tree->SetBranchAddress("tauByMVA6LooseElectronRejection", &tauByMVA6LooseElectronRejection);
     Run_Tree->SetBranchAddress("tauDxy",&tauDxy);
     
     Run_Tree->SetBranchAddress("nMu", &nMu);
@@ -71,7 +71,6 @@ int main(int argc, char** argv) {
     Run_Tree->SetBranchAddress("muIsoTrk", &muIsoTrk);
     Run_Tree->SetBranchAddress("muCharge",&muCharge);
     Run_Tree->SetBranchAddress("muIsMediumID",&muIsMediumID);
-    Run_Tree->SetBranchAddress("muIsLooseID",&muIsLooseID);
     Run_Tree->SetBranchAddress("muPFChIso", &muPFChIso);
     Run_Tree->SetBranchAddress("muPFPhoIso", &muPFPhoIso);
     Run_Tree->SetBranchAddress("muPFNeuIso", &muPFNeuIso);
@@ -89,9 +88,9 @@ int main(int argc, char** argv) {
     Run_Tree->SetBranchAddress("jetEta",&jetEta);
     Run_Tree->SetBranchAddress("jetPhi",&jetPhi);
     Run_Tree->SetBranchAddress("jetEn",&jetEn);
-    Run_Tree->SetBranchAddress("jetpfCombinedInclusiveSecondaryVertexV2BJetTags",&jetpfCombinedInclusiveSecondaryVertexV2BJetTags);
+    Run_Tree->SetBranchAddress("jetpfCombinedMVAV2BJetTags",&jetpfCombinedMVAV2BJetTags);
     Run_Tree->SetBranchAddress("jetPFLooseId",&jetPFLooseId);
-    Run_Tree->SetBranchAddress("jetPUidFullDiscriminant",&jetPUidFullDiscriminant);
+//    Run_Tree->SetBranchAddress("jetPUidFullDiscriminant",&jetPUidFullDiscriminant);
     
     
     Run_Tree->SetBranchAddress("genWeight",&genWeight);
@@ -155,7 +154,7 @@ int main(int argc, char** argv) {
                 float IsoMu1=muPFChIso->at(imu)/muPt->at(imu);
                 if ( (muPFNeuIso->at(imu) + muPFPhoIso->at(imu) - 0.5* muPFPUIso->at(imu) )  > 0.0)
                     IsoMu1= ( muPFChIso->at(imu)/muPt->at(imu) + muPFNeuIso->at(imu) + muPFPhoIso->at(imu) - 0.5* muPFPUIso->at(imu))/muPt->at(imu);
-                bool MuIdIso1=(muIsLooseID->at(imu) > 0 && IsoMu1 < 0.30 && fabs(muD0->at(imu)) < 0.045 && fabs(muDz->at(imu)) < 0.2);
+                bool MuIdIso1=(muIsMediumID->at(imu) > 0 && IsoMu1 < 0.30 && fabs(muD0->at(imu)) < 0.045 && fabs(muDz->at(imu)) < 0.2);
                 
                 
                 // Select second good muon
@@ -163,7 +162,7 @@ int main(int argc, char** argv) {
                 float IsoMu2=muPFChIso->at(jmu)/muPt->at(jmu);
                 if ( (muPFNeuIso->at(jmu) + muPFPhoIso->at(jmu) - 0.5* muPFPUIso->at(jmu) )  > 0.0)
                     IsoMu2= ( muPFChIso->at(jmu)/muPt->at(jmu) + muPFNeuIso->at(jmu) + muPFPhoIso->at(jmu) - 0.5* muPFPUIso->at(jmu))/muPt->at(jmu);
-                bool MuIdIso2=(muIsLooseID->at(jmu) > 0 && IsoMu2 < 0.30 && fabs(muD0->at(jmu)) < 0.045 && fabs(muDz->at(jmu)) < 0.2);
+                bool MuIdIso2=(muIsMediumID->at(jmu) > 0 && IsoMu2 < 0.30 && fabs(muD0->at(jmu)) < 0.045 && fabs(muDz->at(jmu)) < 0.2);
                 
                 
                 bool  OS = muCharge->at(imu) * muCharge->at(jmu) < 0;
@@ -199,7 +198,7 @@ int main(int argc, char** argv) {
                 bool TauPtCut = tauPt->at(itau) > 20  && fabs(tauEta->at(itau)) < 2.3 ;
                 
                 //Apply tau Id and Isolation and dxy
-                bool TauIdIso =  tauByMediumCombinedIsolationDeltaBetaCorr3Hits->at(itau) && tauByTightMuonRejection3->at(itau) > 0 && tauByMVA5LooseElectronRejection->at(itau) > 0 && fabs(tauDxy->at(itau)) < 0.05 ;
+                bool TauIdIso =  tauByMediumCombinedIsolationDeltaBetaCorr3Hits->at(itau) && tauByTightMuonRejection3->at(itau) > 0 && tauByMVA6LooseElectronRejection->at(itau) > 0 && fabs(tauDxy->at(itau)) < 0.05 ;
                 
                 // Check charge of the muon and Taus
                 bool  OS = muCharge->at(imu) * tauCharge->at(itau) < 0;
@@ -222,7 +221,7 @@ int main(int argc, char** argv) {
                 
                 for (int ijet= 0 ; ijet < nJet ; ijet++){
                     BJet4Momentum.SetPtEtaPhiE(jetPt->at(ijet),jetEta->at(ijet),jetPhi->at(ijet),jetEn->at(ijet));
-                    if (jetPFLooseId->at(ijet) > 0.5 && jetPt->at(ijet) > 20 && fabs(jetEta->at(ijet)) < 2.4 && BJet4Momentum.DeltaR(Tau4Momentum) > 0.5 && BJet4Momentum.DeltaR(Mu4Momentum) > 0.5 && jetpfCombinedInclusiveSecondaryVertexV2BJetTags->at(ijet) >  0.89  ){
+                    if (jetPFLooseId->at(ijet) > 0.5 && jetPt->at(ijet) > 20 && fabs(jetEta->at(ijet)) < 2.4 && BJet4Momentum.DeltaR(Tau4Momentum) > 0.5 && BJet4Momentum.DeltaR(Mu4Momentum) > 0.5 && jetpfCombinedMVAV2BJetTags->at(ijet) >  0.89  ){
                         BJetVector.push_back(BJet4Momentum);
                     }
                 }
@@ -239,7 +238,7 @@ int main(int argc, char** argv) {
                     visibleMassSS->Fill(Z4Momentum.M(),TotalWeight);
                 
                 //Apply Relaxed tau Id and Isolation
-                bool RelaxedTauIdIso = tauByTightMuonRejection3->at(itau) > 0 && tauByMVA5LooseElectronRejection->at(itau) > 0 && fabs(tauDxy->at(itau)) < 0.05 ;
+                bool RelaxedTauIdIso = tauByTightMuonRejection3->at(itau) > 0 && tauByMVA6LooseElectronRejection->at(itau) > 0 && fabs(tauDxy->at(itau)) < 0.05 ;
                 
                 //  Fill out the Visible mass for OS events that pass all events cuts with relax Tau Isolation
                 if (OS && !IsthereDiMuon && MuPtCut && TauPtCut && MuIdIso && RelaxedTauIdIso && tmass < 30 && Mu4Momentum.DeltaR(Tau4Momentum) > 0.5 && PassTrigger && BJetVector.size()==0)
