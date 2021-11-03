@@ -70,14 +70,15 @@ int main(int argc, char** argv) {
     Run_Tree->SetBranchAddress("muPhi"  ,&muPhi);
     Run_Tree->SetBranchAddress("muIsoTrk", &muIsoTrk);
     Run_Tree->SetBranchAddress("muCharge",&muCharge);
-    Run_Tree->SetBranchAddress("muIsMediumID",&muIsMediumID);
+//    Run_Tree->SetBranchAddress("muIsMediumID",&muIsMediumID);
     Run_Tree->SetBranchAddress("muPFChIso", &muPFChIso);
     Run_Tree->SetBranchAddress("muPFPhoIso", &muPFPhoIso);
     Run_Tree->SetBranchAddress("muPFNeuIso", &muPFNeuIso);
     Run_Tree->SetBranchAddress("muPFPUIso", &muPFPUIso);
     Run_Tree->SetBranchAddress("muD0",&muD0);
     Run_Tree->SetBranchAddress("muDz",&muDz);
-    
+    Run_Tree->SetBranchAddress("muIDbit", &muIDbit);
+
     
     Run_Tree->SetBranchAddress("pfMET",&pfMET);
     Run_Tree->SetBranchAddress("pfMETPhi",&pfMETPhi);
@@ -138,7 +139,9 @@ int main(int argc, char** argv) {
             float PUData_=HistoPUData->GetBinContent(puNUmdata+1);
             PUWeight= PUData_/PUMC_;
         }
-        float TotalWeight = LumiWeight * GetGenWeight * PUWeight;
+//        float TotalWeight = LumiWeight * GetGenWeight * PUWeight; // need to fix PUWeight
+        float TotalWeight = LumiWeight * GetGenWeight ;
+        
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Loop over Di-Mu events  We need to veto these events later
@@ -154,7 +157,7 @@ int main(int argc, char** argv) {
                 float IsoMu1=muPFChIso->at(imu)/muPt->at(imu);
                 if ( (muPFNeuIso->at(imu) + muPFPhoIso->at(imu) - 0.5* muPFPUIso->at(imu) )  > 0.0)
                     IsoMu1= ( muPFChIso->at(imu)/muPt->at(imu) + muPFNeuIso->at(imu) + muPFPhoIso->at(imu) - 0.5* muPFPUIso->at(imu))/muPt->at(imu);
-                bool MuIdIso1=(muIsMediumID->at(imu) > 0 && IsoMu1 < 0.30 && fabs(muD0->at(imu)) < 0.045 && fabs(muDz->at(imu)) < 0.2);
+                bool MuIdIso1=(muIDbit->at(imu) >> 1 & 1 && IsoMu1 < 0.30 && fabs(muD0->at(imu)) < 0.045 && fabs(muDz->at(imu)) < 0.2);
                 
                 
                 // Select second good muon
@@ -162,7 +165,7 @@ int main(int argc, char** argv) {
                 float IsoMu2=muPFChIso->at(jmu)/muPt->at(jmu);
                 if ( (muPFNeuIso->at(jmu) + muPFPhoIso->at(jmu) - 0.5* muPFPUIso->at(jmu) )  > 0.0)
                     IsoMu2= ( muPFChIso->at(jmu)/muPt->at(jmu) + muPFNeuIso->at(jmu) + muPFPhoIso->at(jmu) - 0.5* muPFPUIso->at(jmu))/muPt->at(jmu);
-                bool MuIdIso2=(muIsMediumID->at(jmu) > 0 && IsoMu2 < 0.30 && fabs(muD0->at(jmu)) < 0.045 && fabs(muDz->at(jmu)) < 0.2);
+                bool MuIdIso2=(muIDbit->at(jmu) >> 1 & 1 && IsoMu2 < 0.30 && fabs(muD0->at(jmu)) < 0.045 && fabs(muDz->at(jmu)) < 0.2);
                 
                 
                 bool  OS = muCharge->at(imu) * muCharge->at(jmu) < 0;
@@ -181,7 +184,8 @@ int main(int argc, char** argv) {
             for  (int itau=0 ; itau < nTau; itau++){
                 
                 // Check Single Muon Trigger  (Maybe we need to add Mu+Tau Trigger)
-                bool PassTrigger = ((HLTEleMuX >> 29 & 1) == 1 || (HLTEleMuX >> 30 & 1) == 1 );
+//                bool PassTrigger = ((HLTEleMuX >> 29 & 1) == 1 || (HLTEleMuX >> 30 & 1) == 1 ); Trigger is not working now ??!!
+                bool PassTrigger = 1;
                 
                 //  Muon Pt and Eta cuts
                 bool MuPtCut = muPt->at(imu) > 20 && fabs(muEta->at(imu)) < 2.1 ;
@@ -192,7 +196,7 @@ int main(int argc, char** argv) {
                     IsoMu= ( muPFChIso->at(imu)/muPt->at(imu) + muPFNeuIso->at(imu) + muPFPhoIso->at(imu) - 0.5* muPFPUIso->at(imu))/muPt->at(imu);
                 
                 //Apply Muon Id and Isolation and dxy/dz cuts
-                bool MuIdIso=(muIsMediumID->at(imu) > 0 && IsoMu < 0.10 && fabs(muD0->at(imu)) < 0.045 && fabs(muDz->at(imu)) < 0.2);
+                bool MuIdIso=(muIDbit->at(imu) >> 1 & 1 && IsoMu < 0.10 && fabs(muD0->at(imu)) < 0.045 && fabs(muDz->at(imu)) < 0.2);
                 
                 // Tau Pt and Eta cuts
                 bool TauPtCut = tauPt->at(itau) > 20  && fabs(tauEta->at(itau)) < 2.3 ;
